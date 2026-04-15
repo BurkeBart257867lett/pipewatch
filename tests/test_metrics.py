@@ -49,6 +49,18 @@ def test_evaluate_critical_without_warning():
     assert result.status == MetricStatus.CRITICAL
 
 
+def test_evaluate_at_warning_boundary():
+    """A value exactly at the warning threshold should trigger WARNING."""
+    result = evaluate_metric(_make_metric(5.0), warning_threshold=5.0, critical_threshold=10.0)
+    assert result.status == MetricStatus.WARNING
+
+
+def test_evaluate_at_critical_boundary():
+    """A value exactly at the critical threshold should trigger CRITICAL."""
+    result = evaluate_metric(_make_metric(10.0), warning_threshold=5.0, critical_threshold=10.0)
+    assert result.status == MetricStatus.CRITICAL
+
+
 def test_metric_repr():
     m = Metric(name="row_count", value=42.0, source="db", unit="rows")
     assert "db/row_count=42.0 rows" in repr(m)
