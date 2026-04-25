@@ -27,6 +27,17 @@ pipewatch anomaly [--config CONFIG] [--history-file FILE] \
 3. If at least `--min-history` points exist and stddev > 0, a z-score is computed.
 4. Any result with `|z| >= z_threshold` is reported as an anomaly.
 
+## Output
+
+Each detected anomaly is printed to stdout in the following format:
+
+```
+ANOMALY  <source>.<metric>  current=<value>  z=<score>  (mean=<mean>, stddev=<stddev>)
+```
+
+If no anomalies are detected, the command exits silently with code `0`.
+If `--exit-code` is set and anomalies are found, the exit code is `2`.
+
 ## Registering the Subcommand
 
 In `pipewatch/cli.py`, add:
