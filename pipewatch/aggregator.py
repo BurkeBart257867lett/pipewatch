@@ -89,7 +89,20 @@ def _aggregate(results: List[MetricResult], *, key_fn) -> Dict[str, AggregatedGr
 
 
 def format_aggregation_report(groups: Dict[str, AggregatedGroup]) -> str:
+    """Return a human-readable report string for a dict of AggregatedGroups.
+
+    Groups are sorted alphabetically by their key so the output is stable
+    across runs regardless of insertion order.
+
+    Args:
+        groups: Mapping of group key to AggregatedGroup, as returned by any
+                of the ``aggregate_by_*`` helpers.
+
+    Returns:
+        A newline-separated string with one line per group, or a placeholder
+        message when *groups* is empty.
+    """
     if not groups:
-        return "No data to aggregate."
-    lines = [str(g) for g in sorted(groups.values(), key=lambda g: g.group_key)]
+        return "No aggregation data available."
+    lines = [str(grp) for _, grp in sorted(groups.items())]
     return "\n".join(lines)
